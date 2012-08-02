@@ -1,0 +1,16 @@
+{
+    "contents" : "# EnsurePackage -  Installs and loads package if necessary\nEnsurePackage<-function(x)\n{\n  x<-as.character(x)\n  if (!require(x,character.only=TRUE))\n  {\n    install.packages(pkgs=x,repos=\"http://cran.r-project.org\")\n    require(x,character.only=TRUE)\n  }\n}\n\n# PrepareTwitter -  Loads packages for working with Twitter\nPrepareTwitter<-function()\n{\n  EnsurePackage('bitops')\n  EnsurePackage('RCurl')\n  EnsurePackage('RJSONIO')\n  EnsurePackage('twitteR')\n}\n\n\n# TweetFrame() - return a data frame based on a Twitter search, sorted by time of creation\nTweetFrame<-function(searchTerm,maxTweets)\n{\n  tweetList<-searchTwitter(searchTerm,n=maxTweets)  \n  df<-do.call('rbind',lapply(tweetList,as.data.frame))\n  sorteddf<-df[order(as.integer(df$created)),]\n  return(sorteddf)\n}\n\n\n# ArrivalProbability() - Given a list of arrival times calculates delays between them using lagged\n# differences, then computes a list of cumulative probabilities of arrival for sequential list\n# of time increments\nArrivalProbability<-function(timesList,increment,max)\n{\n  plist<-NULL\n  timeLen<-length(timesList)\n  if(increment>max){return(NULL)}\n  for(i in seq(increment,max,by=increment))\n  {\n    plist<-c(plist,(sum(as.integer(diff(timesList))<i))/timeLen)\n  }\n  return(plist)\n}\n# tf<-TweetFrame('oprah',500)\n# pl<-ArrivalProbability(tf$created,1,40)\n# plot(pl)\n\n\n#of<-TweetFrame('#oprah',500)\n#gf<-TweetFrame('#ladygaga',500)\n\n\n#ofEventDelays<-as.integer(diff(of$created))\n#gfEventDelays<-as.integer(diff(gf$created))\n\n#mean(ofEventDelays)\n#mean(gfEventDelays)\n\n#sum(gfEventDelays<=43)\n# [1] 320\n# poisson.test(320,500)$conf.int\n\n#sum(ofEventDelays<=43)\n#[1] 82\n#poisson.test(82,500)$conf.int\n\n# no overlap between oprah and gaga conf intervals. significantly differ\n\n\nPoissComp<-function(String1,String2,n)\n{\n  tf1<-TweetFrame(String1,n)\n  tf2<-TweetFrame(String2,n)\n  v1<-diff(as.integer(tf1$created))\n  v2<-diff(as.integer(tf2$created))\n  AvgArr1<-mean(v1)\n  AvgArr2<-mean(v2)\n  TweetsBelowThreshold1<-sum(v1<=AvgArr1)\n  TweetsBelowThreshold2<-sum(v2<=AvgArr1) #using avg arrival of 1st dist as threshold\n  pt<-poisson.test(c(TweetsBelowThreshold1,TweetsBelowThreshold2),c(n,n))\n  return(pt)\n}",
+    "created" : 1342866333013.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4167232791",
+    "id" : "437275F8",
+    "lastKnownWriteTime" : 1342915112,
+    "path" : "~/Documents/RWorkSpace/Twitter/1_PrepareTwitter.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}

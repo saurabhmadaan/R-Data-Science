@@ -1,0 +1,21 @@
+{
+    "contents" : "",
+    "created" : 1342915391967.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "DD0EDCDD",
+    "lastKnownWriteTime" : 0,
+    "path" : null,
+    "properties" : {
+        "contentUrl" : "content?title=Data%3A+tdf&file=9e2a45c15294414fb119052c6f53a48c.htm",
+        "displayedObservations" : "100",
+        "displayedVariables" : 11,
+        "title" : "Data: tdf",
+        "totalObservations" : "100",
+        "variables" : "14"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
